@@ -7,6 +7,13 @@ Check out:
 * [My speaker interview](http://blog.zabbix.com/introducing-speakers-of-zabbix-conference-2016-part-1/5147/)
 * [Conference details](http://www.zabbix.com/conference2016.php)
 
+## Quick references:
+
+* Walk for available OIDs: `$ snmpwalk -c public -v 2c localhost`
+* OIDs:
+  * iso.org.dod.internet.mgmt.mib-2.system: 1.3.6.1.2.1.1
+
+
 ## License
 
 Copyright (c) 2016 Ryan Armstrong

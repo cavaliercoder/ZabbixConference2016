@@ -1,0 +1,3 @@
+[submodule "mib2zabbix"]
+	path = mib2zabbix
+	url = https://github.com/cavaliercoder/mib2zabbix.git

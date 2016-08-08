@@ -17,9 +17,10 @@ Vagrant.configure(2) do |config|
 
 EOL
 
-    # configure shell prompt
+    # configure environment
     sed -i -e 's/#*force_color_prompt=.*/force_color_prompt=yes/' /root/.bashrc
     sed -i -e 's/#*force_color_prompt=.*/force_color_prompt=yes/' /home/vagrant/.bashrc
+    echo "export PATH=/vagrant/mib2zabbix:\\$PATH" > /etc/profile.d/mib2zabbix.sh
 
     # configure zabbix repo
     wget \
@@ -45,7 +46,11 @@ EOL
       zabbix-server-pgsql \
       zabbix-frontend-php \
       zabbix-agent \
-      zabbix-get
+      zabbix-get \
+      snmp \
+      snmp-mibs-downloader \
+      libxml-simple-perl \
+      libsnmp-perl
 
     # configure database
     sudo -u postgres psql <<EOL
@@ -90,6 +95,18 @@ global \\$DB;
 
 \\$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
 EOL
+
+  # configure snmpd
+  sed -i -e 's/^mibs .*/mibs +ALL/' /etc/snmp/snmp.conf
+  sed -i \
+    -e 's/^#rocommunity public  localhost/ rocommunity public  localhost/' \
+    /etc/snmp/snmpd.conf
+    
+  update-rc.d snmpd enable
+  service snmpd start
+
+  # cleanup
+  apt-get autoremove -y
 
   SHELL
 end
