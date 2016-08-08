@@ -17,6 +17,10 @@ Vagrant.configure(2) do |config|
 
 EOL
 
+    # configure shell prompt
+    sed -i -e 's/#*force_color_prompt=.*/force_color_prompt=yes/' /root/.bashrc
+    sed -i -e 's/#*force_color_prompt=.*/force_color_prompt=yes/' /home/vagrant/.bashrc
+
     # configure zabbix repo
     wget \
       http://repo.zabbix.com/zabbix/3.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.0-1+trusty_all.deb
@@ -36,10 +40,12 @@ EOL
     # install packages
     apt-get install -y \
       postgresql-9.5 \
+      php5-pgsql \
       pgadmin3 \
       zabbix-server-pgsql \
       zabbix-frontend-php \
-      zabbix-agent
+      zabbix-agent \
+      zabbix-get
 
     # configure database
     sudo -u postgres psql <<EOL
@@ -55,9 +61,35 @@ EOL
 DBPassword=zabbix
 EOL
 
-  # start zabbix
-  update-rc.d zabbix-server enable
-  service zabbix-server start
+    # start zabbix
+    update-rc.d zabbix-server enable
+    service zabbix-server start
+
+    # configure apache
+    sed -i -e 's/^;*date\\.timezone.*/date.timezone = Australia\\/Perth/' /etc/php5/apache2/php.ini
+    service apache2 restart
+
+    cat > /etc/zabbix/web/zabbix.conf.php <<EOL
+<?php
+// Zabbix GUI configuration file.
+global \\$DB;
+
+\\$DB['TYPE']     = 'POSTGRESQL';
+\\$DB['SERVER']   = 'localhost';
+\\$DB['PORT']     = '0';
+\\$DB['DATABASE'] = 'zabbix';
+\\$DB['USER']     = 'zabbix';
+\\$DB['PASSWORD'] = 'zabbix';
+
+// Schema name. Used for IBM DB2 and PostgreSQL.
+\\$DB['SCHEMA'] = '';
+
+\\$ZBX_SERVER      = 'localhost';
+\\$ZBX_SERVER_PORT = '10051';
+\\$ZBX_SERVER_NAME = 'Vagrant Zabbix';
+
+\\$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
+EOL
 
   SHELL
 end
