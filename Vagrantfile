@@ -101,9 +101,14 @@ EOL
   sed -i \
     -e 's/^#rocommunity public  localhost/ rocommunity public  localhost/' \
     /etc/snmp/snmpd.conf
-    
+
   update-rc.d snmpd enable
-  service snmpd start
+  service snmpd restart
+
+  # install zabbix_agent_bench
+  wget https://sourceforge.net/projects/zabbixagentbench/files/linux/zabbix_agent_bench-0.4.0.x86_64.tar.gz
+  tar -xzf zabbix_agent_bench-0.4.0.x86_64.tar.gz
+  cp -v zabbix_agent_bench-0.4.0.x86_64/zabbix_agent_bench /usr/bin/zabbix_agent_bench
 
   # cleanup
   apt-get autoremove -y
