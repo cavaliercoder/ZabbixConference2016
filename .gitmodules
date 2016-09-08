@@ -1,3 +1,6 @@
 [submodule "mib2zabbix"]
 	path = mib2zabbix
 	url = https://github.com/cavaliercoder/mib2zabbix.git
+[submodule "ZabbixTemplates"]
+	path = ZabbixTemplates
+	url = https://6af4282f813994cd24f7d90958729f7a49430a3a@github.com/cavaliercoder/ZabbixTemplates.git
