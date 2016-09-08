@@ -64,6 +64,25 @@ EOL
 update-rc.d zabbix-server enable
 service zabbix-server start
 
+# install PostgreSQL module
+wget http://s3.cavaliercoder.com/libzbxpgsql/apt/zabbix3/ubuntu/trusty/amd64/libzbxpgsql_1.0.0-1%2Btrusty_amd64.deb
+dpkg -i libzbxpgsql_1.0.0-1+trusty_amd64.deb
+
+# configure zabbix agent
+cat >> /etc/zabbix/zabbix_agentd.conf <<EOL
+EnableRemoteCommands=1
+EOL
+
+cat > /etc/zabbix/zabbix_agentd.d/demo.conf <<EOL
+UserParameter=fork.ping,/bin/echo 1
+UserParameter=perl.ping,/usr/bin/perl -e 'print "1\n";'
+UserParameter=python.ping,/usr/bin/python -c 'print 1'
+
+EOL
+
+update-rc.d zabbix-agent enable
+service zabbix-agent restart
+
 # configure apache
 sed -i -e 's/^;*date\.timezone.*/date.timezone = Australia\/Perth/' /etc/php5/apache2/php.ini
 service apache2 restart
