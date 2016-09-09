@@ -12,6 +12,7 @@ Check out:
 * Walk for available OIDs: `$ snmpwalk -c public -v 2c localhost`
 * OIDs:
   * iso.org.dod.internet.mgmt.mib-2.system: 1.3.6.1.2.1.1
+  * iso.org.dod.internet.mgmt.mib-2.interfaces 1.3.6.1.2.1.2.2
 
 
 ## License

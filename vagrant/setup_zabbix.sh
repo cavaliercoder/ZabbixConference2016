@@ -34,6 +34,7 @@ apt-get update && apt-get upgrade -y
 
 # install packages
 apt-get install -y \
+  dos2unix \
   postgresql-9.5 \
   php5-pgsql \
   pgadmin3 \
@@ -44,7 +45,8 @@ apt-get install -y \
   snmp \
   snmp-mibs-downloader \
   libxml-simple-perl \
-  libsnmp-perl
+  libsnmp-perl \
+  tkmib
 
 # configure database
 sudo -u postgres psql <<EOL
@@ -58,6 +60,7 @@ zcat /usr/share/doc/zabbix-server-pgsql/create.sql.gz \
 # configure zabbix server
 cat >> /etc/zabbix/zabbix_server.conf <<EOL
 DBPassword=zabbix
+CacheUpdateFrequency=10
 EOL
 
 # start zabbix
