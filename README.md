@@ -14,6 +14,12 @@ Check out:
   * iso.org.dod.internet.mgmt.mib-2.system: 1.3.6.1.2.1.1
   * iso.org.dod.internet.mgmt.mib-2.interfaces 1.3.6.1.2.1.2.2
 
+## Windows agent UserParameters
+
+	UserParameter=perf_counter.discovery[*],%systemroot%\system32\windowspowershell\v1.0\powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Get-CounterSetInstances -CounterSet $1 | ConvertTo-ZabbixDiscovery"
+	
+	UserParameter=ps.ping,%systemroot%\system32\windowspowershell\v1.0\powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Write-Host 1"
+
 
 ## License
 
